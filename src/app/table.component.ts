@@ -7,11 +7,13 @@ import { Observable, Subscription } from 'rxjs';
   standalone: true,
   imports: [CommonModule],
   template: `<h1>Lista</h1>
-  
+  <ng-content select="span"></ng-content>
+
   <ol *ngIf="!loading; else defaultLoading">
   <li *ngFor="let item of list">{{item.name}}</li>
   </ol>
-<footer>Razem: {{!list.length ? '-': list.length}}</footer>
+<footer>Razem: {{!list.length ? '-': list.length}}
+<ng-content select="p"></ng-content></footer>
 
 <ng-template #defaultLoading>
 <div>Loading...</div>

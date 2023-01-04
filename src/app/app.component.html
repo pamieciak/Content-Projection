@@ -1,6 +1,10 @@
 <h2>My Awsome App</h2>
 
 <div>
-  <app-table loadingMessage="Characters" [source$]="characters$"></app-table>
-  <app-table loadingMessage="Locations" [source$]="locations$"></app-table>
+  <!-- <app-table loadingMessage="Characters" [source$]="characters$"> </app-table> -->
+
+  <app-table loadingMessage="Locations" [source$]="locations$">
+    <p>Loading Locations like a boss!</p>
+    <span>Another</span>
+  </app-table>
 </div>
