@@ -4,7 +4,8 @@
   <!-- <app-table loadingMessage="Characters" [source$]="characters$"> </app-table> -->
 
   <app-table loadingMessage="Locations" [source$]="locations$">
-    <p>Loading Locations like a boss!</p>
-    <span>Another</span>
+    <ng-template #loading>
+      <p>Loading Locations like a boss!</p>
+    </ng-template>
   </app-table>
 </div>

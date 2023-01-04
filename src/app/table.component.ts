@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, ContentChild, Input, TemplateRef } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
 @Component({
@@ -7,13 +7,19 @@ import { Observable, Subscription } from 'rxjs';
   standalone: true,
   imports: [CommonModule],
   template: `<h1>Lista</h1>
-  <ng-content select="span"></ng-content>
 
-  <ol *ngIf="!loading; else defaultLoading">
+
+  <ol *ngIf="!loading; else templateLoading">
   <li *ngFor="let item of list">{{item.name}}</li>
   </ol>
 <footer>Razem: {{!list.length ? '-': list.length}}
-<ng-content select="p"></ng-content></footer>
+</footer>
+
+<ng-template #templateLoading>
+<ng-container *ngIf="template; else defaultLoading"
+[ngTemplateOutlet]= "template"
+></ng-container>
+</ng-template>
 
 <ng-template #defaultLoading>
 <div>Loading...</div>
@@ -24,6 +30,8 @@ import { Observable, Subscription } from 'rxjs';
   styles: [`h1 { font-family: sans-serif; }`],
 })
 export class TableComponent {
+  @ContentChild('loading') template?: TemplateRef<any>;
+
   @Input() source$!: Observable<{ name: string }[]>;
 
   protected list: { name: string }[] = [];
@@ -44,6 +52,7 @@ export class TableComponent {
     });
     this.sub.add(sub);
   }
+
 
   ngOnDestroy() {
     this.sub.unsubscribe();
