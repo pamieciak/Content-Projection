@@ -16,4 +16,10 @@ export class AppComponent {
     delay(1000),
     map(({ results }) => results)
   );
+  locations$ = from(
+    fetch('https://rickandmortyapi.com/api/location').then((res) => res.json())
+  ).pipe(
+    delay(1000),
+    map(({ results }) => results)
+  );
 }
