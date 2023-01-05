@@ -1,25 +1,30 @@
 import { CommonModule } from '@angular/common';
-import { Component, ContentChild, Input, TemplateRef } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  Input,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { ExampleComponent } from './example.component';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ExampleComponent],
   template: `<h1>Lista</h1>
 
+  <app-example #exampleCmp></app-example>
 
-  <ol *ngIf="!loading; else templateLoading">
+
+  <ol *ngIf="!loading; else template || defaultLoading">
   <li *ngFor="let item of list">{{item.name}}</li>
   </ol>
 <footer>Razem: {{!list.length ? '-': list.length}}
 </footer>
 
-<ng-template #templateLoading>
-<ng-container *ngIf="template; else defaultLoading"
-[ngTemplateOutlet]= "template"
-></ng-container>
-</ng-template>
+
 
 <ng-template #defaultLoading>
 <div>Loading...</div>
@@ -31,6 +36,11 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class TableComponent {
   @ContentChild('loading') template?: TemplateRef<any>;
+  @ViewChild('defaultLoading', {
+    static: true,
+  })
+  defaultLoading!: TemplateRef<any>;
+  @ViewChild('exampleCmp') exampleCmp!: ExampleComponent;
 
   @Input() source$!: Observable<{ name: string }[]>;
 
@@ -40,6 +50,7 @@ export class TableComponent {
   private sub = new Subscription();
 
   ngOnInit() {
+    console.log(this.defaultLoading);
     this.loading = true;
     const sub = this.source$.subscribe({
       next: (res) => {
@@ -52,7 +63,6 @@ export class TableComponent {
     });
     this.sub.add(sub);
   }
-
 
   ngOnDestroy() {
     this.sub.unsubscribe();
